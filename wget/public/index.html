@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html lang="ru" ng-app="wgetApp">
+    
+  <head>
+      
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="css/lumx.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    
+  </head>
+  
+  <body>
+      
+    <div ng-controller="WgetController">
+
+        <lx-button id="button-add" class="bgc-blue-300" lx-size="m" ng-click="showBlockAdd = ! showBlockAdd">Generator options for Wget command</lx-button>
+        
+        <div class="p pt0 bgc-amber-0" flex-container="column" flex-column="12" ng-show="showBlockAdd">
+
+            <form id="add-form" name="reviewForm" ng-submit="reviewForm.$valid && addWgetTask()" novalidate>
+
+                <div class="parametrs p pt0">
+                    <lx-select ng-model="selectModel.selectedParametrsSections"
+                               lx-choices="selectSections"
+                               lx-label="Выберите параметры для wget-команды"
+                               lx-multiple="true">
+                        <lx-select-selected>
+                            {{ $selected.name }} 
+                        </lx-select-selected>
+
+                        <lx-select-choices>
+                            {{ $choice.name }}  ({{$choice.name_full}})   {{$choice.description}}
+                        </lx-select-choices>
+                    </lx-select>
+                </div>
+
+                <div flex-item="4" class="p p-">
+                        <input type="text" class="add-row ng-dirty ng-invalid" placeholder='URL(s) скачиваемого файла (-ов)' ng-model="newURL" autofocus>
+                        <!--<div>{{newURL}}</div>-->
+                </div>
+
+                <div flex-item="4" class="p p-">
+                        <input type="text" class="add-row ng-dirty ng-invalid" placeholder='Путь с именем логфайла' ng-model="newPathSaveFile">
+                        <!--<div>{{newURL}}</div>-->
+                </div>
+
+                <div flex-item="4" class="p p-">
+                        <input type="text" class="add-row ng-dirty ng-invalid" placeholder='Количество попыток загрузки' ng-model="newNumberAttemptSaveFile">
+                        <!--<div>{{newURL}}</div>-->
+                </div>
+
+                <div flex-item="4" class="p p-">
+                        <input type="text" class="add-row ng-dirty ng-invalid" placeholder='Текстовое описание' ng-model="newDescription">
+                        <!--<div>{{newDescription}}</div>-->
+                </div>
+                <div flex-item="4" class="p">
+                    
+                </div>                
+                <div flex-item="4" class="p p-">
+                    <lx-button lx-type="submit" class="bgc-red-300" lx-size="m">Generate</lx-button>
+                </div>
+                
+            </form>
+
+        </div>
+
+        <div>
+            <div class="tc-black-1 p pt++" flex-container="row" flex-column="12">
+                <div id="header-col1" flex-item="1"><div class="p p-"><lx-checkbox lx-color="blue" ng-model="statusChecked" ng-click="markAll(statusChecked)"></lx-checkbox></div></div>
+                <div flex-item="5"><div class="p p-"><b>Команды</b></div></div>
+                <div flex-item="2"><div class="p p-"><b>Примечание</b></div></div>
+                <div flex-item="1"><div class="p p-"></div></div>
+                <div flex-item="1"><div class="p p-"></div></div>
+                <div flex-item="1"><div class="p p-"></div></div>
+            </div>
+
+            <div class="tc-black p pt0" flex-container="row" flex-column="12" ng-repeat="wget in wgetslist | orderBy:'id':true">
+
+                <div flex-item="1" id="header-col1" class="p p-">
+                        <lx-checkbox lx-color="blue" ng-model="wget.completed"></lx-checkbox>
+                </div>
+                 
+                <div flex-item="5" class="p p-">
+                        <div class="command">{{wget.command}}</div>
+                        <div ng-show="showBlock">
+                            <form id="add-form" ng-submit="editWgetLastName(wget)">
+                                <input type="text" id="button-edit1" class="edit-row" ng-model="wget.command">
+                                <lx-button id="button-ok1" class="bgc-red-300" lx-size="xs" ng-submit="editWgetLastName(wget)">ok</lx-button>
+                            </form>
+                        </div>
+                </div>
+
+                <div flex-item="2" class="p p-">
+                        <div class="description">{{wget.description}}</div>
+                        <div ng-show="showBlock">
+                            <form id="add-form" ng-submit="editWgetDescription(wget)">
+                                <input type="text" id="button-edit7" class="edit-row" ng-model="wget.description">
+                                <lx-button id="button-ok7" class="bgc-red-300" lx-size="xs" ng-submit="editWgetDescription(wget)">ok</lx-button>
+                            </form>
+                        </div>
+                </div>
+                <div flex-item="1" id="header-col3" class="p p-">
+                         <lx-button class="bgc-green-300" lx-size="xs" ng-click="showBlock = ! showBlock">edit</lx-button>
+                </div>
+                <div flex-item="1" id="header-col4" class="p p-">
+                        <lx-button class="bgc-red-300" lx-size="xs" ng-click="deleteWgetTask(wget)">delete</lx-button>
+                </div>
+                <div flex-item="1" id="header-col5" class="p p-">
+                        <lx-button class="bgc-orange-300" lx-size="xs" ng-click="runCommand(wget)">run</lx-button>
+                </div>
+
+            </div>
+            
+            <div class="p">
+                Всего строк: {{wgetslist.length}}
+            </div>
+            
+        </div>
+    </div>
+
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/velocity.min.js"></script>
+    <script type="text/javascript" src="js/moment-with-locales.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/lumx.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+  </body>
+  
+</html>

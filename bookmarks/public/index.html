@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html lang="ru" ng-app="bookmarksLibrary">
+    
+  <head>
+      
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="css/lumx.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    
+  </head>
+  
+  <body>
+      
+    <div ng-controller="BookmarkController">
+
+        <div class="p+ bgc-blue-300" flex-container="column" flex-column="12">
+
+            <div flex-item="4" class="p p-">
+            <form id="add-form" ng-submit="addBookmark()">
+                    <input type="text" class="add-row" placeholder='1. Вставте или напишите адрес www-страницы' ng-model="newUrl" autofocus>
+                    <!--<div>{{newUrl}}</div>-->
+            </form>
+            </div>
+            
+            <div flex-item="4" class="p p-">
+            <form id="add-form2" ng-submit="addBookmark()">
+                    <input type="text" class="add-row" placeholder='2. Напишите описание закладки и нажмите "Enter"' ng-model="newDescription">
+                    <!--<div>{{newDescription}}</div>-->
+            </form>
+            </div>
+
+        </div>
+
+        <div>
+            <div class="tc-black-1 p pt++" flex-container="row" flex-column="12">
+                <div id="header-col1" flex-item="1"><div class="p p-"><lx-checkbox lx-color="blue" ng-model="statusChecked" ng-click="markAll(statusChecked)"></lx-checkbox></div></div>
+                <div flex-item="3"><div class="p p-"><b>Адрес закладки</b></div></div>
+                <div flex-item="3"><div class="p p-"><b>Описание закладки</b></div></div>
+            </div>
+
+            <div class="tc-black p pt0" flex-container="row" flex-column="12" ng-repeat="bookmark in bookmarkslist" track by $index>
+
+                <div flex-item="1" id="header-col1" class="p p-">
+                        <lx-checkbox lx-color="blue" ng-model="bookmark.completed"></lx-checkbox>
+                </div>
+                <div flex-item="3" class="p p-">
+                        <a href="{{bookmark.url}}" target="_blank">{{bookmark.url}}</a>
+                        <div ng-show="showBlock">
+                            <form ng-submit="editBookmarkUrl(bookmark)">
+                                <input class="edit-row" ng-model="bookmark.url">
+                                <lx-button id="button-ok1" class="bgc-red-300" lx-size="xs" ng-click="editBookmarkUrl(bookmark)">ok</lx-button>
+                            </form>
+                        </div>
+                </div>
+
+                <div flex-item="3" class="p p-">
+                        <label ng-click="showBlock = ! showBlock">{{bookmark.description}}</label>
+                        <div ng-show="showBlock">
+                            <form ng-submit="editBookmarkDescription(bookmark)">
+                                <input class="edit-row" ng-model="bookmark.description">
+                                <lx-button id="button-ok2" class="bgc-red-300" lx-size="xs" ng-click="editBookmarkDescription(bookmark)">ok</lx-button>
+                            </form>
+                        </div>
+                </div>
+                <div flex-item="1" id="header-col3" class="p p-">
+                         <lx-button class="bgc-green-300" lx-size="xs" ng-click="showBlock = ! showBlock">edit</lx-button>
+                </div>
+                <div flex-item="1" id="header-col4" class="p p-">
+                        <lx-button class="bgc-red-300" lx-size="xs" ng-click="deleteBookmark(bookmark)">delete</lx-button>
+                </div>
+
+            </div>
+            
+            <div class="p">
+                Всего строк: {{bookmarkslist.length}}
+            </div>
+            
+        </div>
+    </div>
+
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/velocity.min.js"></script>
+    <script type="text/javascript" src="js/moment-with-locales.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/lumx.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+  </body>
+  
+</html>

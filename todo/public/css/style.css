@@ -1,0 +1,27 @@
+html {
+    background-color: #fff !important;
+}
+
+#new-todo, #edit-todo {
+    width: 300px;
+}
+
+#edit-todo{
+    margin-top: 5px;
+}
+
+ul{
+    list-style-type:none;
+}
+
+ul > li{
+    height:auto;
+}
+
+input[type="checkbox"],label{
+    cursor: pointer;
+}
+
+label{
+    margin-right: 10px;
+}

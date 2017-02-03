@@ -1,0 +1,47 @@
+html {
+    background-color: #fff !important;
+}
+
+.add-row{
+    width: 30%;
+    min-width: 260px;
+}
+
+.edit-row {
+    width: 86%;
+    min-width: 260px;
+}
+
+.edit-row{
+    margin-top: 8px;
+}
+
+#button-ok1, #button-ok2 {
+    vertical-align: bottom;
+}
+
+ul{
+    list-style-type:none;
+}
+
+ul > li{
+    height:auto;
+}
+
+input[type="checkbox"],label{
+    cursor: pointer;
+}
+
+label{
+    margin-right: 10px;
+}
+
+#header-col1 {
+    flex: 0 0 33px !important;
+    max-width: 33px !important;
+}
+
+#header-col3, #header-col4 {
+    flex: 0 0 3.33333% !important;
+    max-width: 3.33333% !important;
+}

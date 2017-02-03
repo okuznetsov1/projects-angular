@@ -1,0 +1,92 @@
+html {
+    background-color: #fff !important;
+    font-size: 0.85em !important;
+    font-family: sans-serif !important;
+}
+
+.add-row{
+    width: 30%;
+    min-width: 260px;
+}
+
+#button-edit1,#button-edit2,#button-edit3,#button-edit5 {
+    min-width: 85%;
+}
+
+#button-edit4 {
+    width: 81%;
+}
+
+#button-edit6,#button-edit7 {
+    width: 82%;
+}
+
+
+.edit-row{
+    margin-top: 8px;
+}
+
+#button-ok1, #button-ok2, #button-ok3, #button-ok4, #button-ok5, #button-ok6, #button-ok7 {
+    vertical-align: bottom;
+}
+
+input[type="text"]{
+    height: 24px;
+}
+
+ul{
+    list-style-type:none;
+}
+
+ul > li{
+    height:auto;
+}
+
+input[type="checkbox"],label{
+    cursor: pointer;
+}
+
+label{
+    margin-right: 10px;
+}
+
+#header-col1 {
+    flex: 0 0 33px !important;
+    max-width: 33px !important;
+    margin-top: -3px;
+}
+
+#header-col3, #header-col4, #header-col5{
+    flex: 0 0 3.33333% !important;
+}
+
+#button-add {
+    margin: 10px;
+}
+
+.ng-invalid.ng-dirty {
+    /*border-color: #FA787E;*/
+    border: 1px solid #FA787E;
+}
+
+.ng-valid.ng-dirty {
+    /*border-color: #78FA89;*/
+    border: 1px solid #78FA89;
+}
+
+#add-form, #add-form2 {
+    border: 0px;    
+}
+
+#button-edit1, #button-edit2, #button-edit3, #button-edit4, #button-edit5, #button-edit6, #button-edit7{
+    border: 1px solid #A0A0A0;
+}
+
+.parametrs {
+    margin-top: -10px;
+    width: 81%;
+}
+
+.lx-select--default-style.lx-select--view-mode-chips .lx-select-selected-wrapper {
+	cursor: pointer;
+}

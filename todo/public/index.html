@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html lang="ru" ng-app="todoList">
+    
+  <head>
+      
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="css/lumx.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    
+  </head>
+  
+  <body>
+
+    <div ng-controller="TodoController">
+
+        <div class="p+ bgc-blue-300">
+
+            <form id="todo-form" ng-submit="addTodo()">
+                    <input type="text" id="new-todo" placeholder='Введите текст и нажмите "Enter"' ng-model="newTodo" autofocus>
+                    <!--<div>{{newTodo}}</div>-->
+            </form>
+
+        </div>
+
+        <div>
+            <div class="p">
+                <lx-checkbox lx-color="blue" class="mt+" ng-model="statusChecked" ng-click="markAll(statusChecked)"> <b>Список всех дел</b> </lx-checkbox>
+            </div>
+
+            <div>        
+                <ul>
+                    <li class="p" ng-repeat="todo in todoslist" track by $index>
+                        <div>
+                            <lx-checkbox lx-color="blue" class="mt" ng-model="todo.completed">
+                            <label ng-click="showBlock = ! showBlock">{{todo.description}}</label>
+                            <lx-button class="bgc-red-300" lx-size="xs" ng-click="deleteTodo(todo)">delete</lx-button>
+                            <lx-button class="bgc-green-300" lx-size="xs" ng-click="showBlock = ! showBlock">edit</lx-button>
+                            <div ng-show="showBlock">
+                                <form ng-submit="editTodo(todo)">
+                                    <input id="edit-todo" ng-model="todo.description" ng-mouseleave="editTodo(todo)">
+                                </form>
+                            </div>
+                            </lx-checkbox>
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
+            <div class="p">
+                Всего строк: {{todoslist.length}}
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/velocity.min.js"></script>
+    <script src="js/moment-with-locales.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script src="js/lumx.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+  </body>
+  
+</html>
