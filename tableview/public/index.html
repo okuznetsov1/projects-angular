@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="ru" ng-app="notes">
+    
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" href="css/lumx.css">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    </head>
+  
+    <body>
+      
+        <div ng-controller="MainController">
+
+            <div class="tc-white-1 p+" flex-container="row" flex-column="4">
+
+                        <div flex-item="2" ng-controller="ReadFileController" class="container">
+                            <lx-file-input lx-label="IMPORT" on-read-file="readContent($fileContent)"></lx-file-input>                    
+                        </div>
+
+                        <div class="tc-white-1">
+                            
+                            <lx-dropdown>
+                                <lx-dropdown-toggle>
+                                    <lx-button id="menu-export" class="bgc-blue-300" lx-size="m">Export</lx-button>
+                                </lx-dropdown-toggle>
+
+                                <lx-dropdown-menu>
+                                    <ul>
+                                        <li><a id="csv" class="dropdown-link" ng-show="notesContent" ng-click="exportToCSV()">CSV</a></li>
+                                        <li><a id="pdf-text" class="dropdown-link" ng-show="notesContent" ng-click="exportToPdfText()">PDF</a></li>
+                                        <li><a id="pdf" class="dropdown-link" ng-show="notesContent" ng-click="exportToPdf()">PDF (image)</a></li>
+                                        <li><a id="xls" class="dropdown-link" ng-show="notesContent" ng-click="exportToXLS()">XLS</a></li>
+                                        <li><a id="png" class="dropdown-link" ng-show="notesContent" ng-click="exportToPNG()">PNG</a></li>
+                                    </ul>
+                                </lx-dropdown-menu>
+                            </lx-dropdown>
+
+                        </div>
+
+            </div>
+            
+            <div flex-container="column" flex-gutter="24" class="p+" ng-show="notesContent">
+                
+                <div flex-item>
+                    <div class="toolbar has-divider has-divider--dark">
+                        <div class="toolbar__label pl">
+                            <span>{{ selectedRows.length || 0 }} selected item(s) </span>
+                        </div>
+                        <div class="toolbar__right">
+                            <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-click="openDialogAdd()">
+                                <i class="mdi mdi-plus"></i>
+                            </lx-button>
+
+                            <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-if="selectedRows.length === 1" ng-click="openDialogEdit()">
+                                <i class="mdi mdi-pencil"></i>
+                            </lx-button>
+
+                            <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-if="selectedRows.length >= 1" ng-click="openDialogDelete()">
+                                <i class="mdi mdi-delete"></i>
+                            </lx-button>
+                        </div>
+                    </div>
+                </div>
+                <div flex-item>
+                        <lx-data-table id="lolo" lx-border="false" lx-selectable="true" lx-thead="dataTableThead" lx-tbody="dataTableTbody"></lx-data-table>
+                </div>
+            </div>
+
+            <div flex-item>
+   
+                <lx-dialog id="{{ dialogIdAdd }}">
+                    
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Добавление
+                            </span>
+                            <div class="toolbar__right">
+                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                    <i class="mdi mdi-close"></i>
+                                </lx-button>
+                            </div>
+                        </div>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+                                <div id="listAddElements" class="p++">
+
+                                <div ng-repeat="field in fields">
+                                    <div ng-include="getFieldTemplateUrl(field)"></div>
+                                </div>
+
+                                </div>                                    
+                                <div class="p++">
+                                    <lx-button id="button-add" class="bgc-indigo-500" lx-size="xs" lx-type="raised" ng-click="addDialogField()">Добавить</lx-button>
+                                </div>
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                    </lx-dialog-footer>
+                </lx-dialog>
+                
+            </div>
+            
+            <div flex-item>
+   
+                <lx-dialog id="{{ dialogIdEdit }}">
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Редактирование
+                            </span>
+
+                            <div class="toolbar__right">
+                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                    <i class="mdi mdi-close"></i>
+                                </lx-button>
+                            </div>
+                        </div>
+
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+
+                        <div class="p++">
+
+                            <div ng-repeat="field in fields">
+                                <div ng-include="getFieldTemplateUrl2(field)"></div>
+                            </div>
+
+                        </div>
+
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                    </lx-dialog-footer>
+                </lx-dialog>
+                
+            </div>
+            
+            <div flex-item>
+   
+                <lx-dialog id="{{ dialogIdDelete }}">
+                    
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Удаление
+                            </span>
+                            <div class="toolbar__right">
+                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                    <i class="mdi mdi-close"></i>
+                                </lx-button>
+                            </div>
+                        </div>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+                                <div class="p++">
+                                    Выполнить удаление?
+                                </div>                                    
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                        <lx-button lx-type="flat" lx-dialog-close ng-click="dialogYesDelete()">Да</lx-button>
+                        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Нет</lx-button>
+                    </lx-dialog-footer>
+                </lx-dialog>
+                
+            </div>
+            
+        </div>
+
+        <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/velocity.min.js"></script>
+        <script type="text/javascript" src="js/moment-with-locales.js"></script>
+        <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/angular-workers.min.js"></script>
+        <script type="text/javascript" src="js/lumx.min.js"></script>
+        <script type="text/javascript" src="js/angular-sanitize.min.js"></script>
+        <script type="text/javascript" src="js/export-pdf-png/html2canvas.min.js"></script>
+        <script type="text/javascript" src="js/export-pdf-png/pdfmake.min.js"></script>
+        <script type="text/javascript" src='js/export-pdf-png/vfs_fonts.js'></script>
+        <script type="text/javascript" src='js/export-pdf-png/FileSaver.js'></script>
+        <script type="text/javascript" src='js/export-xls-csv/alasql.min.js'></script>
+        <script type="text/javascript" src='js/export-xls-csv/xlsx.core.min.js'></script>
+        <script type="text/javascript" src="js/app.js"></script>
+
+    </body>
+  
+</html>

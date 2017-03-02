@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html lang="ru" ng-app="notes">
+    
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" href="css/lumx.css">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    </head>
+  
+    <body>
+      
+        <div ng-controller="MainController">
+
+            <div flex-item>
+                <div class="toolbar has-divider has-divider--dark">
+                    <div class="toolbar__label pl">
+                        <span>{{ selectedRows.length || 0 }} selected item(s) </span>
+                    </div>
+                    <div class="toolbar__right">
+                        <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-click="addRow()">
+                            <i class="mdi mdi-plus"></i>
+                        </lx-button>
+
+                        <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-if="selectedRows.length === 1" ng-click="editCell()">
+                            <i class="mdi mdi-pencil"></i>
+                        </lx-button>
+
+                        <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-if="selectedRows.length >= 1" ng-click="deleteRow()">
+                            <i class="mdi mdi-delete"></i>
+                        </lx-button>
+                    </div>
+                </div>
+            </div>
+            <div flex-item>
+                        <lx-data-table id="lolo" lx-border="false" lx-selectable="true" lx-thead="dataTableThead" lx-tbody="dataTableTbody"></lx-data-table>
+            </div>
+
+            <div flex-item>
+   
+<!--
+                <div class="p+">
+                    <lx-button ng-click="openDialog()">Open dialog</lx-button>
+                </div>
+-->
+                <lx-dialog id="{{ dialogId }}">
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Lorem Ipsum
+                            </span>
+
+                            <div class="toolbar__right">
+                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                    <i class="mdi mdi-close"></i>
+                                </lx-button>
+                            </div>
+                        </div>
+
+                        <lx-tabs lx-panes-id="lorem-ipsum"
+                                 lx-links="[{label: 'Lorem Ipsum 1'}, {label: 'Lorem Ipsum 2'}, {label: 'Lorem Ipsum 3'}]"
+                                 lx-layout="inline"
+                                 lx-theme="dark"
+                                 lx-color="primary"
+                                 lx-indicator="yellow">
+                        </lx-tabs>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+                        <lx-tabs-panes id="lorem-ipsum">
+
+                            <lx-tab-pane>
+                                <div class="p++">
+
+                                    <lx-text-field lx-label="dessert">
+                                        <input id="dessert" name="dessert" type="text" ng-model="dessert" ng-change="editDialogField()">
+                                    </lx-text-field>
+                                    
+                                </div>
+                            </lx-tab-pane>
+
+                            <lx-tab-pane>
+                                <div class="p++">
+                                    <div ng-repeat="person in people">
+                                        {{ person.name }} - {{ person.email }} - {{ person.age }}
+                                    </div>
+                                </div>
+                            </lx-tab-pane>
+                            
+                            <lx-tab-pane>
+                                <p class="p++">Lorem Ipsum Content 3</p>
+                                <p class="p">text test</p>
+                            </lx-tab-pane>
+                        </lx-tabs-panes>
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+<!--
+                        <lx-button lx-color="black" lx-type="flat" lx-dialog-close ng-click="dialogCancel()">Cancel</lx-button>
+                        <lx-button lx-type="flat" lx-dialog-close ng-click="dialogOk()">Закрыть</lx-button>
+-->
+                    </lx-dialog-footer>
+                </lx-dialog>
+                
+            </div>
+
+
+            <div flex-item>
+   
+                <lx-dialog id="{{ dialogIdAdd }}">
+                    
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Form Add
+                            </span>
+                            <div class="toolbar__right">
+                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                    <i class="mdi mdi-close"></i>
+                                </lx-button>
+                            </div>
+                        </div>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+                                <div id="listAddElements" class="p++">
+                                    <lx-text-field lx-label="add new image">
+                                        <input id="imageNew" name="imageNew" type="text" ng-model="imageNew">
+                                    </lx-text-field>
+                                    <lx-text-field lx-label="add new dessert">
+                                        <input id="dessertNew" name="dessertNew" type="text" ng-model="dessertNew">
+                                    </lx-text-field>
+                                    <lx-text-field lx-label="add new calories">
+                                        <input id="caloriesNew" name="caloriesNew" type="text" ng-model="caloriesNew">
+                                    </lx-text-field>
+                                    <lx-text-field lx-label="add new fat">
+                                        <input id="fatNew" name="fatNew" type="text" ng-model="fatNew">
+                                    </lx-text-field>
+                                    <lx-text-field lx-label="add new comments">
+                                        <input id="commentsNew" name="commentsNew" type="text" ng-model="commentsNew">
+                                    </lx-text-field>
+                                </div>                                    
+                                <div class="p++">
+                                    <lx-button id="button-add" class="bgc-indigo-500" lx-size="xs" lx-type="raised" ng-click="addDialogField()">Добавить</lx-button>
+                                </div>
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                    </lx-dialog-footer>
+                </lx-dialog>
+                
+            </div>
+            
+            <div flex-item>
+   
+                <lx-dialog id="{{ dialogIdDelete }}">
+                    
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Form delete
+                            </span>
+                            <div class="toolbar__right">
+                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                    <i class="mdi mdi-close"></i>
+                                </lx-button>
+                            </div>
+                        </div>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+                                <div class="p++">
+                                    Выполнить удаление?
+                                </div>                                    
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                        <lx-button lx-type="flat" lx-dialog-close ng-click="dialogYesDelete()">Да</lx-button>
+                        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Нет</lx-button>
+                    </lx-dialog-footer>
+                </lx-dialog>
+                
+            </div>
+            
+            
+        </div>
+
+        <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/velocity.min.js"></script>
+        <script type="text/javascript" src="js/moment-with-locales.js"></script>
+        <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/lumx.min.js"></script>
+        <script type="text/javascript" src="js/angular-sanitize.min.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+
+    </body>
+  
+</html>

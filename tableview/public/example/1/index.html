@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html lang="ru" ng-app="myApp">
+    
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="dataTable.css">
+        <link rel="stylesheet" type="text/css" href="material.css">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="icons.css">
+    </head>
+  
+    <body>
+      
+        <div ng-controller="MyController">
+            <dtable options="options" rows="data" class="material" on-page="paging(offset, size)"></dtable>
+        </div>
+
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js"></script>
+        <script type="text/javascript" src="dataTable.min.js"></script>
+        <script type="text/javascript" src="app.js"></script>
+
+    </body>
+  
+</html>
