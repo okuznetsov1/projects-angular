@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html lang="ru" ng-app="notes">
+    
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" href="css/lumx.css">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    </head>
+  
+    <body>
+      
+        <div ng-controller="MainController">
+
+            <div class="tc-white-1 p+" flex-container="row" flex-column="4">
+
+                        <div flex-item="2" ng-controller="ReadFileController" class="container">
+                            <lx-file-input lx-label="IMPORT" on-read-file="readContent($fileContent)"></lx-file-input>                    
+                        </div>
+
+                        <div class="tc-white-1">
+                            
+                            <lx-dropdown>
+                                <lx-dropdown-toggle>
+                                    <lx-button id="menu-export" class="bgc-blue-300" lx-size="m">Export</lx-button>
+                                </lx-dropdown-toggle>
+
+                                <lx-dropdown-menu>
+                                    <ul>                                     
+                                        <li><a id="csv" class="dropdown-link" ng-show="notesContent" ng-click="exportToCSV()">CSV</a></li>
+                                        <li><a id="pdf-text" class="dropdown-link" ng-show="notesContent" ng-click="exportToPdfText()">PDF</a></li>
+                                        <li><a id="pdf" class="dropdown-link" ng-show="notesContent" ng-click="exportToPdf()">PDF (image)</a></li>
+                                        <li><a id="xls" class="dropdown-link" ng-show="notesContent" ng-click="exportToXLS()">XSL</a></li>
+                                        <li><a id="png" class="dropdown-link" ng-show="notesContent" ng-click="exportToPNG()">PNG</a></li>
+                                    </ul>
+                                </lx-dropdown-menu>
+                            </lx-dropdown>
+
+                        </div>
+
+            </div>
+            
+            <div flex-container="row" flex-gutter="24" class="p+">
+                <div flex-item>
+                        <textarea id="content-from-file" ng-model="notesContent" placeholder='Вставьте текст' required cols="55" rows="10"></textarea>
+                </div>
+            </div>
+            <div ng-bind-html="notesContent | to_trusted" flex-container="row" flex-gutter="24" id="div-content" class="p++">
+                {{notesContent}}
+            </div>
+            
+        </div>
+
+        <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/velocity.min.js"></script>
+        <script type="text/javascript" src="js/moment-with-locales.js"></script>
+        <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/angular-workers.min.js"></script>
+        <script type="text/javascript" src="js/lumx.js"></script>
+        <script type="text/javascript" src="js/angular-sanitize.min.js"></script>
+        <script type="text/javascript" src="js/export-pdf-png/html2canvas.min.js"></script>
+        <script type="text/javascript" src="js/export-pdf-png/pdfmake.min.js"></script>
+        <script type="text/javascript" src='js/export-pdf-png/vfs_fonts.js'></script>
+        <script type="text/javascript" src='js/export-pdf-png/FileSaver.js'></script>
+        <script type="text/javascript" src='js/export-xls-csv/alasql.min.js'></script>
+        <script type="text/javascript" src='js/export-xls-csv/xlsx.core.min.js'></script>
+        <script type="text/javascript" src="js/app.js"></script>
+
+    </body>
+  
+</html>
