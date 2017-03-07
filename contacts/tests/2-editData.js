@@ -16,6 +16,7 @@ var findString = '11112';
 
 //ПОЛУЧИТЬ ВСЕ ЭЛЕМЕНТЫ С ОДИНАКОВЫМ ИМЕНЕМ КЛАССА
 var pendingElements = browser.findElements(webdriver.By.className('last-name'));
+
 pendingElements.then(function (elements) {
     var i=0;
     var pendingHtml = elements.map(function (elem) {
@@ -30,13 +31,13 @@ pendingElements.then(function (elements) {
                 index = i;
 
                 //Нажали иминно ту кнопку Edit в которой нашли строку
-                var xpButton = '/html/body/div/div[2]/div['+ (2+i) +']/div[9]/button';
+                var xpButton = '/html/body/div/div[3]/div['+ (2+i) +']/div[9]/button';
                 browser.findElement({ xpath:xpButton}).click();
                 sleepTime("нажали на кнопку Edit открыв форму редактирования",1000);
 
 
                 //Получаем текст из инпута 
-                var xpInput = '/html/body/div/div[2]/div['+ (2+i) +']/div[2]/div[2]/form/input';
+                var xpInput = '/html/body/div/div[3]/div['+ (2+i) +']/div[2]/div[2]/form/input';
                 browser.findElement({ xpath:xpInput}).getAttribute("value").
                                 then(function(text) {
                                   console.log('result: ', text);

@@ -23,9 +23,9 @@ var deleteRecord = function(findString){
 
                     var xpInput = '/html/body/div/div[3]/div['+ (2+i) +']/div[1]/div/input';
                     browser.findElement({ xpath:xpInput}).click();
-                    sleepTime("Открыживаем чекбокс",2000);
+                    sleepTime("Открыживаем чекбокс",3000);
 
-                    //Нажали иминно ту кнопку Edit в которой нашли строку
+                    //Нажали иминно ту кнопку delete в которой нашли строку
                     var xpButton = '/html/body/div/div[3]/div['+ (2+i) +']/div[10]/button';
                     browser.findElement({ xpath:xpButton}).click();
                     sleepTime("нажали на кнопку DELETE",1000);

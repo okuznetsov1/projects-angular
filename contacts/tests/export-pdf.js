@@ -12,9 +12,13 @@ browser.get('http://www.girlswantgames.com/anguler-tasks-contacts/')
         .then(function(){
             
             sleepTime("Ожидаем 2 секунды пока загрузится html-страница",2000);
-            browser.findElement(webdriver.By.id("button-export")).sendKeys()
+
+            browser.findElement(webdriver.By.id("menu-export")).click();
+            sleepTime("Нажимаем на меню Export",2000);
+                                    
+            browser.findElement(webdriver.By.id("pdf")).click()
                 .then(function(){
-                    sleepTime("Нажимаем на кнопку Export",2000);
+                    sleepTime("Нажимаем на кнопку Export в .PDF",2000);
             })
             .catch(function(error) {
                 console.log(error);
