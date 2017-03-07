@@ -49,19 +49,19 @@
                             <span>{{ selectedRows.length || 0 }} selected item(s) </span>
                         </div>
                         <div class="toolbar__right">
-                            <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-click="openDialogAdd()">
+                            <lx-button id="row-add" lx-size="l" lx-color="grey" lx-type="icon" ng-click="openDialogAdd()">
                                 <i class="mdi mdi-plus"></i>
                             </lx-button>
 
-                            <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="selectedRows.length > 1 || ((selectedRows.length || 0) === 0)" ng-click="openDialogEdit()">
+                            <lx-button id="row-edit" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="selectedRows.length > 1 || ((selectedRows.length || 0) === 0)" ng-click="openDialogEdit()">
                                 <i class="mdi mdi-pencil"></i>
                             </lx-button>
 
-                            <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="!selectedRows.length >= 1" ng-click="openDialogDelete()">
+                            <lx-button id="row-delete" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="!selectedRows.length >= 1" ng-click="openDialogDelete()">
                                 <i class="mdi mdi-delete"></i>
                             </lx-button>
                             
-                            <lx-button lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="!selectedRows.length >= 1" ng-click="openDialogCharts()">
+                            <lx-button id="row-chart" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="!selectedRows.length >= 1" ng-click="openDialogCharts()">
                                 <i class="mdi mdi-chart-pie"></i>
                             </lx-button>
                         </div>
@@ -82,7 +82,7 @@
                                 Добавление
                             </span>
                             <div class="toolbar__right">
-                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                <lx-button id="dialog-close" lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
                                     <i class="mdi mdi-close"></i>
                                 </lx-button>
                             </div>
@@ -118,7 +118,7 @@
                             </span>
 
                             <div class="toolbar__right">
-                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                <lx-button id="dialog-close" lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
                                     <i class="mdi mdi-close"></i>
                                 </lx-button>
                             </div>
@@ -154,7 +154,7 @@
                                 Удаление
                             </span>
                             <div class="toolbar__right">
-                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                <lx-button id="dialog-close" lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
                                     <i class="mdi mdi-close"></i>
                                 </lx-button>
                             </div>
@@ -168,7 +168,7 @@
                     </lx-dialog-content>
 
                     <lx-dialog-footer>
-                        <lx-button lx-type="flat" lx-dialog-close ng-click="dialogYesDelete()">Да</lx-button>
+                        <lx-button id="dialog-delete-yes" lx-type="flat" lx-dialog-close ng-click="dialogYesDelete()">Да</lx-button>
                         <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Нет</lx-button>
                     </lx-dialog-footer>
                 </lx-dialog>
@@ -185,7 +185,7 @@
                                 Диаграмма
                             </span>
                             <div class="toolbar__right">
-                                <lx-button lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                <lx-button id="dialog-close" lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
                                     <i class="mdi mdi-close"></i>
                                 </lx-button>
                             </div>
