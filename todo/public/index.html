@@ -34,7 +34,7 @@
                     <li class="p" ng-repeat="todo in todoslist" track by $index>
                         <div>
                             <lx-checkbox lx-color="blue" class="mt" ng-model="todo.completed">
-                            <label ng-click="showBlock = ! showBlock">{{todo.description}}</label>
+                            <label class="name" ng-click="showBlock = ! showBlock">{{todo.description}}</label>
                             <lx-button class="bgc-red-300" lx-size="xs" ng-click="deleteTodo(todo)">delete</lx-button>
                             <lx-button class="bgc-green-300" lx-size="xs" ng-click="showBlock = ! showBlock">edit</lx-button>
                             <div ng-show="showBlock">
