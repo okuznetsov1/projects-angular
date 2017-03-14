@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="ru" ng-app="notes">
+<html lang="ru" ng-app="app">
     
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -11,12 +11,12 @@
   
     <body>
       
-        <div ng-controller="MainController">
+        <div ng-controller="MainController as vm">
 
             <div class="tc-white-1 p+" flex-container="row" flex-column="4">
 
-                        <div flex-item="2" ng-controller="ReadFileController" class="container">
-                            <lx-file-input lx-label="IMPORT" on-read-file="readContent($fileContent)"></lx-file-input>                    
+                        <div flex-item="2" ng-controller="ReadFileController as readfile" class="container">
+                            <lx-file-input lx-label="IMPORT" on-read-file="readfile.readContent($fileContent,vm)"></lx-file-input>                    
                         </div>
 
                         <div class="tc-white-1">
@@ -28,11 +28,11 @@
 
                                 <lx-dropdown-menu>
                                     <ul>
-                                        <li><a id="csv" class="dropdown-link" ng-show="notesContent" ng-click="exportToCSV()">CSV</a></li>
-                                        <li><a id="pdf-text" class="dropdown-link" ng-show="notesContent" ng-click="exportToPdfText()">PDF</a></li>
-                                        <li><a id="pdf" class="dropdown-link" ng-show="notesContent" ng-click="exportToPdf()">PDF (image)</a></li>
-                                        <li><a id="xls" class="dropdown-link" ng-show="notesContent" ng-click="exportToXLS()">XLS</a></li>
-                                        <li><a id="png" class="dropdown-link" ng-show="notesContent" ng-click="exportToPNG()">PNG</a></li>
+                                        <li><a id="csv" class="dropdown-link" ng-show="vm.notesContent" ng-click="vm.exportToCSV()">CSV</a></li>
+                                        <li><a id="pdf-text" class="dropdown-link" ng-show="vm.notesContent" ng-click="vm.exportToPdfText()">PDF</a></li>
+                                        <li><a id="pdf" class="dropdown-link" ng-show="vm.notesContent" ng-click="vm.exportToPdf()">PDF (image)</a></li>
+                                        <li><a id="xls" class="dropdown-link" ng-show="vm.notesContent" ng-click="vm.exportToXLS()">XLS</a></li>
+                                        <li><a id="png" class="dropdown-link" ng-show="vm.notesContent" ng-click="vm.exportToPNG()">PNG</a></li>
                                     </ul>
                                 </lx-dropdown-menu>
                             </lx-dropdown>
@@ -41,40 +41,40 @@
 
             </div>
             
-            <div flex-container="column" flex-gutter="24" class="p+" ng-show="notesContent">
+            <div flex-container="column" flex-gutter="24" class="p+" ng-show="vm.notesContent">
                 
                 <div flex-item>
                     <div class="toolbar has-divider has-divider--dark">
                         <div class="toolbar__label pl">
-                            <span>{{ selectedRows.length || 0 }} selected item(s) </span>
+                            <span>{{ vm.selectedRows.length || 0 }} selected item(s) </span>
                         </div>
                         <div class="toolbar__right">
-                            <lx-button id="row-add" lx-size="l" lx-color="grey" lx-type="icon" ng-click="openDialogAdd()">
+                            <lx-button id="row-add" lx-size="l" lx-color="grey" lx-type="icon" ng-click="vm.openDialogAdd()">
                                 <i class="mdi mdi-plus"></i>
                             </lx-button>
 
-                            <lx-button id="row-edit" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="selectedRows.length > 1 || ((selectedRows.length || 0) === 0)" ng-click="openDialogEdit()">
+                            <lx-button id="row-edit" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="vm.selectedRows.length > 1 || ((vm.selectedRows.length || 0) === 0)" ng-click="vm.openDialogEdit()">
                                 <i class="mdi mdi-pencil"></i>
                             </lx-button>
 
-                            <lx-button id="row-delete" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="!selectedRows.length >= 1" ng-click="openDialogDelete()">
+                            <lx-button id="row-delete" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="!vm.selectedRows.length >= 1" ng-click="vm.openDialogDelete()">
                                 <i class="mdi mdi-delete"></i>
                             </lx-button>
                             
-                            <lx-button id="row-chart" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="!selectedRows.length >= 1" ng-click="openDialogCharts()">
+                            <lx-button id="row-chart" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="!vm.selectedRows.length >= 1" ng-click="vm.openDialogCharts()">
                                 <i class="mdi mdi-chart-pie"></i>
                             </lx-button>
                         </div>
                     </div>
                 </div>
-                <div flex-item>
-                        <lx-data-table id="lolo" lx-border="false" lx-selectable="true" lx-thead="dataTableThead" lx-tbody="dataTableTbody"></lx-data-table>
+                <div flex-item id="lolo2">
+                        <lx-data-table id="lolo" lx-border="false" lx-selectable="true" lx-thead="vm.dataTableThead" lx-tbody="vm.dataTableTbody"></lx-data-table>
                 </div>
             </div>
 
             <div flex-item>
    
-                <lx-dialog id="{{ dialogIdAdd }}">
+                <lx-dialog id="{{ vm.dialogIdAdd }}">
                     
                     <lx-dialog-header>
                         <div class="toolbar bgc-primary pl++">
@@ -92,13 +92,11 @@
                     <lx-dialog-content>
                                 <div id="listAddElements" class="p++">
 
-                                <div ng-repeat="field in fields">
-                                    <div ng-include="getFieldTemplateUrl(field)"></div>
-                                </div>
-
+                                    <comp-form-add info="vm.fields"></comp-form-add>
+                                    
                                 </div>                                    
                                 <div class="p++">
-                                    <lx-button id="button-add" class="bgc-indigo-500" lx-size="xs" lx-type="raised" ng-click="addDialogField()">Добавить</lx-button>
+                                    <lx-button id="button-add" class="bgc-indigo-500" lx-size="xs" lx-type="raised" ng-click="vm.addDialogField()">Добавить</lx-button>
                                 </div>
                     </lx-dialog-content>
 
@@ -110,7 +108,7 @@
             
             <div flex-item>
    
-                <lx-dialog id="{{ dialogIdEdit }}">
+                <lx-dialog id="{{ vm.dialogIdEdit }}">
                     <lx-dialog-header>
                         <div class="toolbar bgc-primary pl++">
                             <span class="toolbar__label tc-white fs-title">
@@ -129,13 +127,14 @@
                     <lx-dialog-content>
 
                         <div class="p++">
-
-                            <div ng-repeat="field in fields">
-                                <div ng-include="getFieldTemplateUrl2(field)"></div>
-                            </div>
-
+                            
+                            <comp-form-edit info="vm.fields"></comp-form-edit>
+                            
                         </div>
-
+                        <div class="p++">
+                            <lx-button id="button-edit" class="bgc-indigo-500" lx-size="xs" lx-type="raised" ng-click="vm.editDialogField()">Сохранить</lx-button>
+                        </div>
+                        
                     </lx-dialog-content>
 
                     <lx-dialog-footer>
@@ -146,7 +145,7 @@
             
             <div flex-item>
    
-                <lx-dialog id="{{ dialogIdDelete }}">
+                <lx-dialog id="{{ vm.dialogIdDelete }}">
                     
                     <lx-dialog-header>
                         <div class="toolbar bgc-primary pl++">
@@ -168,7 +167,7 @@
                     </lx-dialog-content>
 
                     <lx-dialog-footer>
-                        <lx-button id="dialog-delete-yes" lx-type="flat" lx-dialog-close ng-click="dialogYesDelete()">Да</lx-button>
+                        <lx-button id="dialog-delete-yes" lx-type="flat" lx-dialog-close ng-click="vm.dialogYesDelete()">Да</lx-button>
                         <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Нет</lx-button>
                     </lx-dialog-footer>
                 </lx-dialog>
@@ -177,7 +176,7 @@
             
             <div flex-item>
    
-                <lx-dialog id="{{ dialogIdCharts }}">
+                <lx-dialog id="{{ vm.dialogIdCharts }}">
                     
                     <lx-dialog-header>
                         <div class="toolbar bgc-primary pl++">
@@ -206,21 +205,28 @@
             
         </div>
 
-        <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-        <script type="text/javascript" src="js/velocity.min.js"></script>
-        <script type="text/javascript" src="js/moment-with-locales.js"></script>
-        <script type="text/javascript" src="js/angular.min.js"></script>
-        <script type="text/javascript" src="js/angular-workers.min.js"></script>
-        <script type="text/javascript" src="js/lumx.min.js"></script>
-        <script type="text/javascript" src="js/angular-sanitize.min.js"></script>
-        <script type="text/javascript" src="js/export-pdf-png/html2canvas.min.js"></script>
-        <script type="text/javascript" src="js/export-pdf-png/pdfmake.min.js"></script>
-        <script type="text/javascript" src='js/export-pdf-png/vfs_fonts.js'></script>
-        <script type="text/javascript" src='js/export-pdf-png/FileSaver.js'></script>
-        <script type="text/javascript" src='js/export-xls-csv/alasql.min.js'></script>
-        <script type="text/javascript" src='js/export-xls-csv/xlsx.core.min.js'></script>
-        <script type="text/javascript" src="js/app.js"></script>
-        <script type="text/javascript" src="js/ng-google-chart.js"></script>
+        <script type="text/javascript" src="js/libs/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/libs/velocity.min.js"></script>
+        <script type="text/javascript" src="js/libs/moment-with-locales.js"></script>
+        <script type="text/javascript" src="js/libs/angular.min.js"></script>
+        <script type="text/javascript" src="js/libs/angular-workers.min.js"></script>
+        <script type="text/javascript" src="js/libs/lumx.min.js"></script>
+        <script type="text/javascript" src="js/libs/angular-sanitize.min.js"></script>
+        <script type="text/javascript" src="js/libs/export-pdf-png/html2canvas.min.js"></script>
+        <script type="text/javascript" src="js/libs/export-pdf-png/pdfmake.min.js"></script>
+        <script type="text/javascript" src='js/libs/export-pdf-png/vfs_fonts.js'></script>
+        <script type="text/javascript" src='js/libs/export-pdf-png/FileSaver.js'></script>
+        <script type="text/javascript" src='js/libs/export-xls-csv/alasql.min.js'></script>
+        <script type="text/javascript" src='js/libs/export-xls-csv/xlsx.core.min.js'></script>
+        <script type="text/javascript" src="js/app/app.js"></script>
+        <script type="text/javascript" src="js/app/directives.onReadFile.js"></script>
+        <script type="text/javascript" src="js/app/directives.ng-google-chart.js"></script>
+        <script type="text/javascript" src="js/app/components.inputAdd.js"></script>
+        <script type="text/javascript" src="js/app/components.inputEdit.js"></script>
+        <script type="text/javascript" src="js/app/service.nameImportFile.js"></script>
+        <script type="text/javascript" src="js/app/service.vmObject.js"></script>
+        <script type="text/javascript" src="js/app/controllers.readFile.js"></script>
+        <script type="text/javascript" src="js/app/controllers.main.js"></script>
     </body>
   
 </html>

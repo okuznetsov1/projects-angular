@@ -1,0 +1,5 @@
+<div ng-repeat="field in $ctrl.info">
+    <lx-text-field id="dialog-edit" lx-label="{{field.name}}">
+        <input id="{{field.name}}" name="{{field.name}}" type="text" ng-model="field.value">
+    </lx-text-field>
+</div>
