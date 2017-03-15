@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="ru" ng-app="tcpdumpApp">
+<html lang="ru" ng-app="app">
     
   <head>
       
@@ -13,7 +13,7 @@
   
   <body>
       
-    <div ng-controller="TcpdumpController">
+    <div ng-controller="TcpdumpController as vm">
 
         <lx-button id="button-add" class="bgc-blue-300" lx-size="m" ng-click="showBlockAdd = ! showBlockAdd">Generator options for "tcpdump" command</lx-button>
         
@@ -25,9 +25,9 @@
                 </div>
 
                 <div class="parametrs p pt0">
-                    <lx-select ng-model="selectModel.selectParametrsNotSections" ng-change="test()"
-                               lx-choices="selectSections"
-                               lx-label="Нажмите и выберите ключи для tcpdump-команды"
+                    <lx-select ng-model="vm.selectModel.selectParametrsNotSections" ng-change="vm.check()"
+                               lx-choices="vm.selectSections"
+                               lx-label="Выберите из списка ключи для tcpdump-команды"
                                lx-multiple="true"
                                lx-view-mode="chips">
                         <lx-select-selected>
@@ -41,84 +41,84 @@
                 </div>
 
                 <div flex-item="4" class="p p-">
-                        <input type="text" class="add-row ng-dirty ng-invalid" placeholder='Кол-во пакетов после которого завершается работа' ng-model="newNumberPackages" ng-show="cNumberPackages == 2" autofocus>
+                        <input type="text" id="number-packages" class="add-row ng-dirty ng-invalid" placeholder='Кол-во пакетов после которого завершается работа' ng-model="vm.newNumberPackages" ng-show="vm.cNumberPackages == 2" autofocus>
                 </div>
 
                 <div flex-item="4" class="p p-">
-                        <input type="text" class="add-row ng-dirty ng-invalid" placeholder='Имя сетевого интерфейса для захвата пакетов' ng-model="newNetInterface" ng-show="cClass == 1">
+                        <input type="text" id="net-interface" class="add-row ng-dirty ng-invalid" placeholder='Имя сетевого интерфейса для захвата пакетов' ng-model="vm.newNetInterface" ng-show="vm.cClass == 1">
                 </div>
 
                 <div flex-item="4" class="p p-">
-                        <input type="text" class="add-row ng-dirty ng-invalid" placeholder='Количество байтов пакета, которые будет обрабатывать tcpdump' ng-model="newNumberPackagesByte" ng-show="cNumberPackagesByte == 3">
+                        <input type="text" id="number-packages-byte" class="add-row ng-dirty ng-invalid" placeholder='Кол-во байтов пакета, которые будет обрабатывать tcpdump' ng-model="vm.newNumberPackagesByte" ng-show="vm.cNumberPackagesByte == 3">
                 </div>
 
-                <div flex-item="4" class="p p-">
-                        <input type="checkbox" ng-model="myFilters"> Подключить фильтр(-ы) захвата
-                </div>
-                <div flex-item="4" class="p p-">
-                        <input type="text" class="add-row ng-dirty ng-invalid" placeholder='Фильтр(-ы) захвата (введите в ручную)' ng-model="newFilters" ng-show="myFilters">
+                <div flex-item="4" class="p p-" ng-show="vm.showFilters === 'success'">
+                    <div flex-item="4" class="p p-">
+                            <input type="checkbox" id="check-filters" ng-model="myFilters"> Подключить фильтр(-ы) захвата
+                    </div>
+                    <div flex-item="4" class="p p-">
+                            <input type="text" id="filters" class="add-row ng-dirty ng-invalid" placeholder='Фильтр(-ы) захвата (введите в ручную)' ng-model="vm.newFilters" ng-show="myFilters">
+                    </div>
                 </div>
 
-                <div flex-item="4" class="p">
+                <div flex-item="4" class="p p-" ng-show="vm.showButtonGen === 'success'">
+                    <lx-button lx-type="button" flex-item-order="1" id="button-generate" class="bgc-red-300" lx-size="m" ng-click="vm.runGenerate()">Generate</lx-button> 
+                    <div flex-item="4" class="p p+"></div>
                 </div>
-                <div flex-item="4" class="p p-">
-                    <lx-button lx-type="button" flex-item-order="1" class="bgc-red-300" lx-size="m" ng-click="runGenerate()">Generate</lx-button> 
-                </div>
-                
+
             </form>
 
-            <div flex-item="4" class="p p+">
+            <div ng-show="vm.showGen === 'success'" >
+                <form id="add-form" name="reviewForm" ng-submit="reviewForm.$valid && vm.addCommand()" novalidate>
+
+                    <div flex-item="4" class="p p-">
+                        <input type="text" id="generation-command" class="add-row" ng-model="vm.newGenerationCommand" ng-readonly="true" ng-disabled="true" placeholder='Сгенерированная tcpdump-команда'>
+                    </div>
+                    <div flex-item="4" class="p p-">
+                            <input type="text" id="description-command" class="add-row ng-dirty ng-invalid" placeholder='Введите описание команды' ng-model="vm.newDescription">
+                            <!--<div>{{newDescription}}</div>-->
+                    </div>
+                    <div flex-item="4" class="p p-">
+                        <lx-button lx-type="submit" id="save-command" flex-item-order="2" class="bgc-red-300" lx-size="m">Save command</lx-button>
+                    </div>
+                    <div flex-item="4" class="p p+"></div>
+                </form>
             </div>
-
-            <form id="add-form" name="reviewForm" ng-submit="reviewForm.$valid && addTcpdumpTask()" novalidate>
-                
-                <div flex-item="4" class="p p-">
-                    <input type="text" class="add-row" ng-model="newGenerationCommand" ng-readonly="true" ng-disabled="true" placeholder='Сгенерированная tcpdump-команда'>
-                </div>
-                <div flex-item="4" class="p p-">
-                        <input type="text" class="add-row ng-dirty ng-invalid" placeholder='Текстовое описание команды' ng-model="newDescription">
-                        <!--<div>{{newDescription}}</div>-->
-                </div>
-                <div flex-item="4" class="p p-">
-                    <lx-button lx-type="submit" flex-item-order="2" class="bgc-red-300" lx-size="m">Save command</lx-button>
-                </div>
-                
-            </form>
 
         </div>
 
         <div>
             <div class="tc-black-1 p pt++" flex-container="row" flex-column="12">
-                <div id="header-col1" flex-item="1"><div class="p p-"><lx-checkbox lx-color="blue" ng-model="statusChecked" ng-click="markAll(statusChecked)"></lx-checkbox></div></div>
-                <div flex-item="5"><div class="p p-"><b>Сохранённые команды</b></div></div>
-                <div flex-item="2"><div class="p p-"><b>Примечание</b></div></div>
+                <div id="header-col1" flex-item="1"><div class="p p-"><lx-checkbox lx-color="blue" ng-model="statusChecked" ng-click="vm.markAll(statusChecked)"></lx-checkbox></div></div>
+                <div flex-item="3"><div class="p p-"><b>Сохранённые команды</b></div></div>
+                <div flex-item="3"><div class="p p-"><b>Описание команды</b></div></div>
                 <div flex-item="1"><div class="p p-"></div></div>
                 <div flex-item="1"><div class="p p-"></div></div>
                 <div flex-item="1"><div class="p p-"></div></div>
             </div>
 
-            <div class="tc-black p pt0" flex-container="row" flex-column="12" ng-repeat="tcpdump in tcpdumplists | orderBy:'id':true">
+            <div class="tc-black p pt0" flex-container="row" flex-column="12" ng-repeat="tcpdump in vm.tcpdumplists | orderBy:'id':true">
 
                 <div flex-item="1" id="header-col1" class="p p-">
                         <lx-checkbox lx-color="blue" ng-model="tcpdump.completed"></lx-checkbox>
                 </div>
                  
-                <div flex-item="5" class="p p-">
+                <div flex-item="3" class="p p-">
                         <div class="command">{{tcpdump.command}}</div>
                         <div ng-show="showBlock">
-                            <form id="add-form" ng-submit="editTcpdumpCommand(tcpdump)">
+                            <form id="add-form" ng-submit="vm.editCommand(tcpdump)">
                                 <input type="text" id="button-edit1" class="edit-row" ng-model="tcpdump.command">
-                                <lx-button id="button-ok1" class="bgc-red-300" lx-size="xs" ng-submit="editTcpdumpCommand(tcpdump)">ok</lx-button>
+                                <lx-button id="button-ok1" class="bgc-red-300" lx-size="xs" ng-submit="vm.editCommand(tcpdump)">ok</lx-button>
                             </form>
                         </div>
                 </div>
 
-                <div flex-item="2" class="p p-">
+                <div flex-item="3" class="p p-">
                         <div class="description">{{tcpdump.description}}</div>
                         <div ng-show="showBlock">
-                            <form id="add-form" ng-submit="editTcpdumpDescription(tcpdump)">
+                            <form id="add-form" ng-submit="vm.editDescription(tcpdump)">
                                 <input type="text" id="button-edit7" class="edit-row" ng-model="tcpdump.description">
-                                <lx-button id="button-ok7" class="bgc-red-300" lx-size="xs" ng-submit="editTcpdumpDescription(tcpdump)">ok</lx-button>
+                                <lx-button id="button-ok7" class="bgc-red-300" lx-size="xs" ng-submit="vm.editDescription(tcpdump)">ok</lx-button>
                             </form>
                         </div>
                 </div>
@@ -126,24 +126,28 @@
                          <lx-button class="bgc-green-300" lx-size="xs" ng-click="showBlock = ! showBlock">edit</lx-button>
                 </div>
                 <div flex-item="1" id="header-col4" class="p p-">
-                        <lx-button class="bgc-red-300" lx-size="xs" ng-click="deleteTcpdumpTask(tcpdump)">delete</lx-button>
+                        <lx-button class="bgc-red-300" lx-size="xs" ng-click="vm.deleteCommand(tcpdump)">delete</lx-button>
                 </div>
 
             </div>
             
             <div class="p">
-                Всего строк: {{tcpdumplists.length}}
+                Всего строк: {{vm.tcpdumplists.length}}
             </div>
             
         </div>
     </div>
 
-    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="js/velocity.min.js"></script>
-    <script type="text/javascript" src="js/moment-with-locales.js"></script>
-    <script type="text/javascript" src="js/angular.min.js"></script>
-    <script type="text/javascript" src="js/lumx.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/libs/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/libs/velocity.min.js"></script>
+    <script type="text/javascript" src="js/libs/moment-with-locales.js"></script>
+    <script type="text/javascript" src="js/libs/angular.min.js"></script>
+    <script type="text/javascript" src="js/libs/lumx.js"></script>
+    <script type="text/javascript" src="js/app/app.js"></script>
+    <script type="text/javascript" src="js/app/controllers.tcpdump.js"></script>
+    <script type="text/javascript" src="js/app/service.dataByCommands.js"></script>
+    <script type="text/javascript" src="js/app/service.dataByOptions.js"></script>
+    <script type="text/javascript" src="js/app/service.addCommand.js"></script>
 
   </body>
   

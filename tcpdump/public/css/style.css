@@ -88,5 +88,12 @@ label{
 }
 
 .lx-select--default-style.lx-select--view-mode-chips .lx-select-selected-wrapper {
-	cursor: pointer;
+    cursor: pointer;
+}
+
+.lx-select--default-style.lx-select--view-mode-chips:not(.lx-select--autocomplete) .lx-select-selected-wrapper::after {
+    right: 67% !important;
+}
+.p.pt0.bgc-amber-0 {
+    margin-bottom: -30px !important;
 }

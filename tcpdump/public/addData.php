@@ -19,11 +19,6 @@ $genCommand = $data->genCommand;
 $description = $data->description;
 $response = array();
 
-//$url = $_REQUEST['url'];
-//$description = $_REQUEST['description'];
-//$completed = $_REQUEST['completed'];
-//$response = array();
-
 //Получаем все данные по всем контактам в системе
 $Obj = new Query();
 $id = $Obj->addData($genCommand, $description, $completed="false");
