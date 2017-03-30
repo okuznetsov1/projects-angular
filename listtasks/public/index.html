@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="ru" ng-app="app">
+    
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="css/lumx.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    </head>
+  
+    <body>
+      
+        <div ng-controller="MainController as vm">
+            
+            <div flex-container="column" flex-gutter="24" class="p+">
+                
+                <div flex-item>
+                    <div class="toolbar has-divider has-divider--dark">
+                        <div class="toolbar__label pl">
+                            <span>{{ vm.selectedRows.length || 0 }} selected task(s) </span>
+                        </div>
+                        <div class="toolbar__right">
+                            <lx-button id="row-add" lx-size="l" lx-color="grey" lx-type="icon" ng-click="vm.openDialogAdd()">
+                                <i class="mdi mdi-plus"></i>
+                            </lx-button>
+
+                            <lx-button id="row-edit" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="vm.selectedRows.length > 1 || ((vm.selectedRows.length || 0) === 0)" ng-click="vm.openDialogEdit()">
+                                <i class="mdi mdi-pencil"></i>
+                            </lx-button>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div flex-item id="lolo2">
+                        <lx-data-table id="lolo" lx-border="false" lx-selectable="true" lx-thead="vm.dataTableThead" lx-tbody="vm.dataTableTbody"></lx-data-table>
+                </div>
+            </div>
+
+            <div flex-item>
+   
+                <lx-dialog id="{{ vm.dialogIdAdd }}">
+                    
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Добавление
+                            </span>
+                            <div class="toolbar__right">
+                                <lx-button id="dialog-close" lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                    <i class="mdi mdi-close"></i>
+                                </lx-button>
+                            </div>
+                        </div>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+                        
+                        <div class="p++">                          
+
+                                <lx-text-field lx-label="Название">
+                                    <input id="task_name-new" name="task_name" type="text" ng-model="vm.tasknameNew">
+                                </lx-text-field>
+
+                                <lx-select id="priority-new" ng-model="vm.priorityNew" 
+                                           lx-label="Выберите приоритет задачи:" 
+                                           choices="vm.choices">
+                                  <lx-select-selected>
+                                    {{ $selected.name }}
+                                  </lx-select-selected>
+                                  <lx-select-choices>
+                                    {{ $choice.name }}
+                                  </lx-select-choices>
+                                </lx-select>
+
+                                <lx-select id="tag-new" ng-model="vm.selectModelNew.tag"
+                                           lx-choices="vm.choicesTag"
+                                           lx-label="Выберите теги:"
+                                           lx-multiple="true">
+                                    <lx-select-selected>
+                                        {{ $selected.name }}
+                                    </lx-select-selected>
+
+                                    <lx-select-choices>
+                                        {{ $choice.name }}
+                                    </lx-select-choices>
+                                </lx-select>
+
+                                <lx-select id="status-new" ng-model="vm.statusNew" 
+                                           lx-label="Выберите статус:" 
+                                           lx-choices="vm.choicesStatus">
+                                  <lx-select-selected>
+                                    {{ $selected.name }}
+                                  </lx-select-selected>
+                                  <lx-select-choices>
+                                    {{ $choice.name }}
+                                  </lx-select-choices>
+                                </lx-select>
+
+                        </div>                                   
+                        <div class="p++">
+                            <lx-button id="button-add" class="bgc-indigo-500" lx-size="xs" lx-type="raised" ng-click="vm.addDialogField()">Добавить</lx-button>
+                        </div>
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                    </lx-dialog-footer>
+                </lx-dialog>
+                
+            </div>
+            
+            <div flex-item>
+   
+                <lx-dialog id="{{ vm.dialogIdEdit }}">
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Редактирование
+                            </span>
+
+                            <div class="toolbar__right">
+                                <lx-button id="dialog-close" lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                    <i class="mdi mdi-close"></i>
+                                </lx-button>
+                            </div>
+                        </div>
+
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+
+                        <div class="p++">                          
+                            
+                                <lx-text-field lx-label="Название">
+                                    <input id="task_name" name="task_name" type="text" ng-model="vm.taskname">
+                                </lx-text-field>
+                            
+                                <lx-select ng-model="vm.priority" 
+                                           lx-label="Выберите приоритет задачи:" 
+                                           choices="vm.choices">
+                                  <lx-select-selected>
+                                    {{ $selected.name }}
+                                  </lx-select-selected>
+                                  <lx-select-choices>
+                                    {{ $choice.name }}
+                                  </lx-select-choices>
+                                </lx-select>
+                                        
+                                <lx-select ng-model="vm.selectModel.tag"
+                                           lx-choices="vm.choicesTag"
+                                           lx-label="Выберите теги:"
+                                           lx-multiple="true">
+                                    <lx-select-selected>
+                                        {{ $selected.name }}
+                                    </lx-select-selected>
+
+                                    <lx-select-choices>
+                                        {{ $choice.name }}
+                                    </lx-select-choices>
+                                </lx-select>
+                            
+                                <lx-select ng-model="vm.status" 
+                                           lx-label="Выберите статус:" 
+                                           lx-choices="vm.choicesStatus">
+                                  <lx-select-selected>
+                                    {{ $selected.name }}
+                                  </lx-select-selected>
+                                  <lx-select-choices>
+                                    {{ $choice.name }}
+                                  </lx-select-choices>
+                                </lx-select>
+
+                        </div>
+                        <div class="p++">
+                            <lx-button id="button-edit" class="bgc-indigo-500" lx-size="xs" lx-type="raised" ng-click="vm.editDialogField()">Сохранить</lx-button>
+                        </div>
+                        
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                    </lx-dialog-footer>
+                </lx-dialog>
+                
+            </div>
+            
+        </div>
+
+        <script type="text/javascript" src="js/libs/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/libs/velocity.min.js"></script>
+        <script type="text/javascript" src="js/libs/moment-with-locales.js"></script>
+        <script type="text/javascript" src="js/libs/angular.min.js"></script>
+        <script type="text/javascript" src="js/libs/lumx.min.js"></script>
+        <script type="text/javascript" src="js/libs/angular-sanitize.min.js"></script>
+        <script type="text/javascript" src="js/app/app.js"></script>
+        <script type="text/javascript" src="js/app/service.dataByTasks.js"></script>
+        <script type="text/javascript" src="js/app/service.dataByOptions.js"></script>
+        <script type="text/javascript" src="js/app/controllers.main.js"></script>
+    </body>
+  
+</html>
