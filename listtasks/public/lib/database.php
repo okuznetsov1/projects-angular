@@ -4,7 +4,7 @@
 require_once 'settings.php';
 
 /**
-*Класс для подключения и работы с базой данных через PDO
+*Класс Database
 */
 class Database{
     private $_connection;

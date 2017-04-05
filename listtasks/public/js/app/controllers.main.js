@@ -59,7 +59,20 @@
                     vm.dataTableTbody = data;
 
                     //в datatable вместо отображения содержимого объекта со сво-ми id и name тегов выводим строку с перечисленными тегами через запятую
-                    dataProcessingIsTagsForDrawTable();
+                    var s;
+                    var arrayTags = [];
+                    //Собираем массив содержащий tag.name для его отображения в datatable
+                    angular.forEach(vm.dataTableTbody, function (element) {
+                        s = '';
+                        angular.forEach(element.tags_id, function (tag) {
+                            s += tag.tag_name + ', ';
+                        });
+                        s = s.substring(0, s.length - 2);
+                        arrayTags.push(s);
+                    });
+                    angular.forEach(vm.dataTableTbody, function (element, key) {
+                        element.tags_name = arrayTags[key];
+                    });
 
                     $scope.$on('lx-data-table__selected', updateActions);
                     $scope.$on('lx-data-table__unselected', updateActions);
@@ -94,29 +107,30 @@
                         //vm.choices = [{id:'0c4dc671-b202-44a2-bf15-d94773cc1ccd',name:'Низкий'}];
                         vm.choices = data;
                         vm.priorityNew = '';
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
+                        
+                        serviceDataByOptions
+                            .getTag()
+                            .then(function(data) { 
+                                vm.choicesTag = data;
+                                vm.selectModelNew = {
+                                    tag: []
+                                };
 
-                serviceDataByOptions
-                    .getTag()
-                    .then(function(data) { 
-                        vm.choicesTag = data;
-                        vm.selectModelNew = {
-                            tag: []
-                        };
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
-                    
+                                serviceDataByOptions
+                                    .getStatus()
+                                    .then(function(data) { 
+                                        vm.choicesStatus = data;
+                                        vm.statusNew = '';
+                                    })
+                                    .catch(function(error) {
+                                        console.log(error);
+                                    });
 
-                serviceDataByOptions
-                    .getStatus()
-                    .then(function(data) { 
-                        vm.choicesStatus = data;
-                        vm.statusNew = '';
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                        
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -128,60 +142,60 @@
 
                 LxDialogService.open(vm.dialogIdEdit);
 
-            vm.taskname = vm.selectedRows[0].task_name;
+                vm.taskname = vm.selectedRows[0].task_name;
 
-            serviceDataByOptions
-                .getPriority()
-                .then(function(data) {
-                    //vm.choices = [{id:'0c4dc671-b202-44a2-bf15-d94773cc1ccd',name:'Низкий'}];
-                    vm.choices = data;
-                    vm.priority = {id:vm.selectedRows[0].priority_id,name:vm.selectedRows[0].priority_name};
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
-
-            serviceDataByOptions
-                .getTag()
-                .then(function(data) { 
-                    vm.choicesTag = data;
-
-                    var strTags = vm.selectedRows[0].tags_name.replace(/,\s/g,',');
-                    var arrayTags = strTags.split(',');
-
-                    //Собираем для объекта vm.selectModel - все теги относящиеся к задаче, для того чтобы отобразить их в Select-e
-                    var arraySelectedTagName = [];
-                    var keepGoing = true;
-                    angular.forEach(arrayTags, function (tag) {
-                            angular.forEach(vm.choicesTag, function (element) {
-                                if(keepGoing) {
-                                    if(angular.equals(tag, element.name)){
-                                        arraySelectedTagName.push({id:element.id, name:element.name});
-                                        keepGoing = false;
-                                    }
-                                }
-                            });
-                            keepGoing = true;
+                serviceDataByOptions
+                    .getPriority()
+                    .then(function(data) {
+                        //vm.choices = [{id:'0c4dc671-b202-44a2-bf15-d94773cc1ccd',name:'Низкий'}];
+                        vm.choices = data;
+                        vm.priority = {id:vm.selectedRows[0].priority_id,name:vm.selectedRows[0].priority_name};
+                    })
+                    .catch(function(error) {
+                        console.log(error);
                     });
 
-                    vm.selectModel = {
-                        tag: arraySelectedTagName
-                    };
+                serviceDataByOptions
+                    .getTag()
+                    .then(function(data) { 
+                        vm.choicesTag = data;
 
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
+                        var strTags = vm.selectedRows[0].tags_name.replace(/,\s/g,',');
+                        var arrayTags = strTags.split(',');
 
-            serviceDataByOptions
-                .getStatus()
-                .then(function(data) { 
-                    vm.choicesStatus = data;
-                    vm.status = {id:vm.selectedRows[0].status_id,name:vm.selectedRows[0].status_name};
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
+                        //Собираем для объекта vm.selectModel - все теги относящиеся к задаче, для того чтобы отобразить их в Select-e
+                        var arraySelectedTagName = [];
+                        var keepGoing = true;
+                        angular.forEach(arrayTags, function (tag) {
+                                angular.forEach(vm.choicesTag, function (element) {
+                                    if(keepGoing) {
+                                        if(angular.equals(tag, element.name)){
+                                            arraySelectedTagName.push({id:element.id, name:element.name});
+                                            keepGoing = false;
+                                        }
+                                    }
+                                });
+                                keepGoing = true;
+                        });
+
+                        vm.selectModel = {
+                            tag: arraySelectedTagName
+                        };
+
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
+                serviceDataByOptions
+                    .getStatus()
+                    .then(function(data) { 
+                        vm.choicesStatus = data;
+                        vm.status = {id:vm.selectedRows[0].status_id,name:vm.selectedRows[0].status_name};
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
 
             }
 
@@ -296,65 +310,42 @@
                 return name;
             }
 
-            function dataProcessingIsTagsForDrawTable(){
-                
-                var s;
-                var arrayTags = [];
-
-                //Собираем массив содержащий tag.name для его отображения в datatable
-                angular.forEach(vm.dataTableTbody, function (element) {
-                    s = '';
-                    angular.forEach(element.tags_id, function (tag) {
-                        s += tag.tag_name + ', ';
-                    });
-                    s = s.substring(0, s.length - 2);
-                    arrayTags.push(s);
-                });
-                
-                angular.forEach(vm.dataTableTbody, function (element, key) {
-                    element.tags_name = arrayTags[key];
-                });
-             
-            }
-
             function orderByTasks(){
                 vm.dataTableTbody = $filter('orderBy')(vm.dataTableTbody, ["status_name","priority_id","task_name"], false);
             }
             
-            vm.notify = function(type,text)
-            {
-                if (type === 'simple')
-                {
-                    LxNotificationService.notify(text);
+            vm.notify = function(type,text){
+                
+                switch(type){
+                    case 'simple': 
+                                    LxNotificationService.notify(text);
+                                    break;
+                    case 'sticky': 
+                                    LxNotificationService.notify('text', undefined, true);
+                                    break;
+                    case 'icon': 
+                                    LxNotificationService.notify(text, 'android');
+                                    break;
+                    case 'color': 
+                                    LxNotificationService.notify(text, undefined, false, 'grey');
+                                    break;
+                    case 'info': 
+                                    LxNotificationService.info(text);
+                                    break;
+                    case 'success': 
+                                    LxNotificationService.success(text);
+                                    break;
+                    case 'warning': 
+                                    LxNotificationService.warning(text);
+                                    break;
+                    case 'error': 
+                                    LxNotificationService.error(text);
+                                    break;
+                    default: 
+                                    LxNotificationService.notify(text);
+                                    break;
                 }
-                else if (type === 'sticky')
-                {
-                    LxNotificationService.notify('text', undefined, true);
-                }
-                else if (type === 'icon')
-                {
-                    LxNotificationService.notify(text, 'android');
-                }
-                else if (type === 'color')
-                {
-                    LxNotificationService.notify(text, undefined, false, 'grey');
-                }
-                else if (type === 'info')
-                {
-                    LxNotificationService.info(text);
-                }
-                else if (type === 'success')
-                {
-                    LxNotificationService.success(text);
-                }
-                else if (type === 'warning')
-                {
-                    LxNotificationService.warning(text);
-                }
-                else if (type === 'error')
-                {
-                    LxNotificationService.error(text);
-                }
+                
             };
 
         }
