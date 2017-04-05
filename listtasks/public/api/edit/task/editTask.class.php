@@ -1,6 +1,6 @@
 <?php
 
-class editTasks{
+class editTask{
     
     public $response;
     

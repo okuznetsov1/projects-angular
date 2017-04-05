@@ -28,6 +28,10 @@
                             <lx-button id="row-edit" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="vm.selectedRows.length > 1 || ((vm.selectedRows.length || 0) === 0)" ng-click="vm.openDialogEdit()">
                                 <i class="mdi mdi-pencil"></i>
                             </lx-button>
+
+                            <lx-button id="row-delete" lx-size="l" lx-color="grey" lx-type="icon" ng-disabled="!vm.selectedRows.length >= 1" ng-click="vm.openDialogDelete()">
+                                <i class="mdi mdi-delete"></i>
+                            </lx-button>
                             
                         </div>
                     </div>
@@ -178,6 +182,37 @@
                     </lx-dialog-content>
 
                     <lx-dialog-footer>
+                    </lx-dialog-footer>
+                </lx-dialog>
+                
+            </div>
+
+            <div flex-item>
+   
+                <lx-dialog id="{{ vm.dialogIdDelete }}">
+                    
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Удаление
+                            </span>
+                            <div class="toolbar__right">
+                                <lx-button id="dialog-close" lx-size="l" lx-color="white" lx-type="icon" lx-dialog-close>
+                                    <i class="mdi mdi-close"></i>
+                                </lx-button>
+                            </div>
+                        </div>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+                                <div class="p++">
+                                    Выполнить удаление?
+                                </div>                                    
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                        <lx-button id="dialog-delete-yes" lx-type="flat" lx-dialog-close ng-click="vm.deleteDialog()">Да</lx-button>
+                        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Нет</lx-button>
                     </lx-dialog-footer>
                 </lx-dialog>
                 

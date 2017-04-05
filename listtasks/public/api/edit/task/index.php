@@ -4,11 +4,11 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 
 //Подключаем класс с настройками для проекта
-require_once '../../lib/settings.php';
+require_once '../../../lib/settings.php';
 //Подключаем классы для работы с базой данных
-require_once '../../lib/database.php';
-require_once '../../lib/queries.php';
-require_once 'editTasks.class.php';
+require_once '../../../lib/database.php';
+require_once '../../../lib/queries.php';
+require_once 'editTask.class.php';
 
 
 $data = json_decode(file_get_contents("php://input"));
@@ -41,7 +41,7 @@ $status_id = htmlspecialchars(stripslashes($data->status_id),ENT_QUOTES);
 
 if( !empty($task_id) && !empty($task_name) && !empty($priority_id) && count($tags_id)>0 && !empty($status_id) ){
 
-    $editTasks = new editTasks();
+    $editTask = new editTask();
 
     //Получаем все теги по определенной задаче до их редактирования
     $Obj = new Query();
@@ -54,10 +54,10 @@ if( !empty($task_id) && !empty($task_name) && !empty($priority_id) && count($tag
     if($task_id){
 
         //Удаляем из таблицы теги которых больше нет у задачи с определенным ID
-        $editTasks->deleteTagsForTask($dataTags, $tags_id, $task_id);
+        $editTask->deleteTagsForTask($dataTags, $tags_id, $task_id);
 
         //Добавляем в таблицу новые теги для определенной задачи
-        $arrayTagsId = $editTasks->addTagsForTask($dataTags, $tags_id, $task_id);    
+        $arrayTagsId = $editTask->addTagsForTask($dataTags, $tags_id, $task_id);    
 
     }
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Содержит все SQL-запросы для работы с базой данных проекта
+ * SQL-запросы
  */
 class Query {
     private $_dbh = NULL;
@@ -192,35 +192,6 @@ class Query {
     }   
     
     /**
-     * Получает все данные по всем опциям имеющимся в таблице
-     * @return array данные о делах
-     */
-    public function getAllSections(){
-
-        $arr = array();
-        $a = array();
-        
-        $sql = "SELECT * FROM tcpdump_sections ORDER BY id ASC";
-
-        try {
-            $arr = $this->_dbh->query($sql);
-            
-
-            foreach ($arr as $row) {
-                $a[]= $row;
-            }   
-            /*** close the database connection ***/
-            $this->_dbh = null;
-
-        } 
-        catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-
-        return $a;
-    }    
-    
-    /**
      * Добавляет в систему новую задачу
      * @return int уникальный идентификатор добавленной задачи в системе
      */
@@ -245,40 +216,15 @@ class Query {
     }
     
     /**
-     * Удаляет соответствующую условию запись 
+     * Удаляет соответствующую условию задачу 
      * @param int $id Уникальный идентификатор
      */
 
-    public function deleteData($id){
+    public function deleteTask($id){
         
         $arr = array();
 
-        $sql = "DELETE FROM tcpdump WHERE id=" . $id;
-
-        try {
-            $arr = $this->_dbh->query($sql);
-            
-            //close the database connection
-            $this->_dbh = null;
-            
-            return $id;
-        } 
-        catch (PDOException $e) {
-            return 0; 
-            //$e->getMessage();
-        }
-    }
-    
-    /**
-     * Редактируем соответствующую условию запись 
-     * @param int $id Уникальный идентификатор 
-     */
-
-    public function editDataDescription($id,$description){
-        
-       $arr = array();
-
-       $sql = 'UPDATE tcpdump SET description = "' . $description . '" WHERE id=' . $id;
+        $sql = "DELETE FROM listtasks WHERE id='" . $id . "'";
 
         try {
             $arr = $this->_dbh->query($sql);
@@ -326,7 +272,6 @@ class Query {
      * Удаляет теги которых уже нет у задачи 
      * @param int $id Уникальный идентификатор
      */
-
     public function deleteTagsForTask($tag_id, $task_id){
         
         $arr = array();
@@ -340,6 +285,30 @@ class Query {
             $this->_dbh = null;
             
             return $id;
+        } 
+        catch (PDOException $e) {
+            return 0; 
+            //$e->getMessage();
+        }
+    }
+    
+    /**
+     * Удаляет все теги у задачи 
+     * @param int $id Уникальный идентификатор
+     */
+    public function deleteAllTagsForTask($task_id){
+        
+        $arr = array();
+
+        $sql = "DELETE FROM listtasks_tags WHERE listtasks_id='" . $task_id ."'";
+
+        try {
+            $arr = $this->_dbh->query($sql);
+            
+            //close the database connection
+            $this->_dbh = null;
+            
+            return $task_id;
         } 
         catch (PDOException $e) {
             return 0; 
@@ -406,36 +375,6 @@ class Query {
         }
 
         return $a;
-    }     
-    
-//     /**
-//     * Добавляет в систему теги для задачи
-//     * @return int уникальный идентификатор тега
-//     */
-//    public function editDataTagsForTask($task_id, $tag_id){
-//
-//       $arr = array();
-//
-//       $sql = 'UPDATE 
-//                    listtasks_tags 
-//               SET 
-//                    listtasks_id = "' . $task_id . '"
-//               WHERE 
-//                    id="' . $tag_id . '" AND listtasks_id="' . $task_id . '"';
-//
-//        try {
-//            $arr = $this->_dbh->query($sql);
-//            
-//            //close the database connection
-//            $this->_dbh = null;
-//            
-//            return $tag_id;
-//        }
-//        catch (PDOException $e) {
-//            return 0; 
-//            //$e->getMessage();
-//        }
-//        
-//    }
+    }
     
 }

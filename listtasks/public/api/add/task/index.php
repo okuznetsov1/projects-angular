@@ -4,12 +4,12 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 
 //Подключаем класс с настройками для проекта
-require_once '../../lib/settings.php';
+require_once '../../../lib/settings.php';
 //Подключаем классы для работы с базой данных
-require_once '../../lib/database.php';
-require_once '../../lib/queries.php';
-require_once '../../lib/uuid/UUID.class.php';
-require_once '../edit/task/editTask.class.php';
+require_once '../../../lib/database.php';
+require_once '../../../lib/queries.php';
+require_once '../../edit/task/editTask.class.php';
+//require_once 'editTask.class.php';
 
 $data = json_decode(file_get_contents("php://input"));
 

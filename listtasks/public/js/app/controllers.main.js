@@ -16,9 +16,11 @@
             //Диалоговые окна
             vm.dialogIdEdit = 'dialog-edit';
             vm.dialogIdAdd = 'dialog-add';
+            vm.dialogIdDelete = 'dialog-delete';
             vm.openDialogEdit = openDialogEdit;
             vm.openDialogAdd = openDialogAdd;
-
+            vm.openDialogDelete = openDialogDelete;
+            
             serviceDataByTasks
                 .get()
                 .then(function(data) {
@@ -100,42 +102,43 @@
                 LxDialogService.open(vm.dialogIdAdd);
 
                 vm.tasknameNew = '';
+                vm.priorityNew = '';
+                vm.selectModelNew = {
+                    tag: []
+                };
+                vm.statusNew = '';
 
-                serviceDataByOptions
-                    .getPriority()
-                    .then(function(data) {                                                
-                        //vm.choices = [{id:'0c4dc671-b202-44a2-bf15-d94773cc1ccd',name:'Низкий'}];
-                        vm.choices = data;
-                        vm.priorityNew = '';
-                        
-                        serviceDataByOptions
-                            .getTag()
-                            .then(function(data) { 
-                                vm.choicesTag = data;
-                                vm.selectModelNew = {
-                                    tag: []
-                                };
-
-                                serviceDataByOptions
-                                    .getStatus()
-                                    .then(function(data) { 
-                                        vm.choicesStatus = data;
-                                        vm.statusNew = '';
-                                    })
-                                    .catch(function(error) {
-                                        console.log(error);
-                                    });
-
-                            })
-                            .catch(function(error) {
-                                console.log(error);
-                            });
-                        
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
+                try {
                 
+                    serviceDataByOptions
+                        .getPriority()
+                        .then(function(data) {
+                            //vm.choices = [{id:'0c4dc671-b202-44a2-bf15-d94773cc1ccd',name:'Низкий'}];
+                            vm.choices = data;   
+                        })
+                        .then(function() {
+                            serviceDataByOptions
+                                .getTag()
+                                .then(function(data) { 
+                                    vm.choicesTag = data;
+                                })
+                        })
+                        .then(function() {
+                            serviceDataByOptions
+                                .getStatus()
+                                .then(function(data) { 
+                                    vm.choicesStatus = data;
+                                })
+                        })
+                        .catch(function(error) {
+                            throw new Error('Произошла ошибка в serviceDataByOptions. Возникли проблемы с получением данных из БД! ' + error);
+                        });
+
+                } catch(error) {
+                    vm.notify('error',error.message);
+                    console.log(error);
+                }
+
             }
 
             function openDialogEdit(){
@@ -199,6 +202,44 @@
 
             }
 
+            function openDialogDelete(){
+                LxDialogService.open(vm.dialogIdDelete);
+            }
+
+            vm.deleteDialog = function(){
+
+                var arrayTasksId = [];
+                angular.forEach(vm.selectedRows, function (element) {
+                        arrayTasksId.push(element.uuid);
+                });
+
+                serviceDataByTasks
+                    .delete(arrayTasksId)
+                    .then(function() {
+
+                        //Убираем удаленные задачи из vm.dataTableTbody, т.е. из datatable
+                        var access = 0;
+                        angular.forEach(vm.selectedRows, function (element) {
+                            angular.forEach(vm.dataTableTbody, function (element2) {
+                                if( element === element2 ){
+                                    vm.dataTableTbody.splice(vm.dataTableTbody.indexOf(element2), 1);
+                                    access = 1;
+                                }
+                            });
+                        });
+                        if(access){
+                            //строки удалили, соответственно очищаем массив с выделенными в data-table строками
+                            vm.selectedRows.splice(0,vm.selectedRows.length);
+                            vm.notify('success','Данные успешно удалены!');
+                        }
+                
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
+            }
+            
             vm.editDialogField = function(){
 
                 vm.selectedRows[0].task_name = vm.taskname;
